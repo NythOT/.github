@@ -1,0 +1,71 @@
+name: Jules AI Agent
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'Tarefa ou instrução para o Jules'
+        required: true
+        default: 'Analise o repositório e sugira melhorias ou correções.'
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  jules:
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@jules')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@jules')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@jules')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@jules') || contains(github.event.issue.title, '@jules')))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Extrair Prompt para o Jules
+        id: resolve-prompt
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_PROMPT: ${{ github.event.inputs.prompt }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          REVIEW_BODY: ${{ github.event.review.body }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            TASK_PROMPT="$DISPATCH_PROMPT"
+          elif [ "$EVENT_NAME" = "issue_comment" ] || [ "$EVENT_NAME" = "pull_request_review_comment" ]; then
+            TASK_PROMPT="$COMMENT_BODY"
+          elif [ "$EVENT_NAME" = "pull_request_review" ]; then
+            TASK_PROMPT="$REVIEW_BODY"
+          elif [ "$EVENT_NAME" = "issues" ]; then
+            TASK_PROMPT="Issue: ${ISSUE_TITLE}"$'\n\n'"${ISSUE_BODY}"
+          else
+            TASK_PROMPT="Analise o repositório e aplique as tarefas necessárias."
+          fi
+
+          echo "prompt<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$TASK_PROMPT" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Run Jules Action
+        uses: google-labs-code/jules-action@v1
+        with:
+          jules_api_key: ${{ secrets.JULES_API_KEY }}
+          prompt: ${{ steps.resolve-prompt.outputs.prompt }}
+          starting_branch: ${{ github.event.repository.default_branch }}
