@@ -2,9 +2,9 @@
 
 # ⚔️ NythOT
 
-### A autêntica experiência 7.4 com melhorias e customizações exclusivas.
+### A autêntica experiência 7.72 com melhorias e customizações exclusivas.
 
-[![Versão](https://img.shields.io/badge/Versão-7.4-blue?style=for-the-badge)](https://github.com/NythOT)
+[![Versão](https://img.shields.io/badge/Versão-7.72-blue?style=for-the-badge)](https://github.com/NythOT)
 [![Status](https://img.shields.io/badge/Status-Lançamento%20em%20Breve-orange?style=for-the-badge)](https://github.com/NythOT)
 [![Client](https://img.shields.io/badge/Client-Moderno%20%26%20Otimizado-brightgreen?style=for-the-badge)](https://github.com/NythOT)
 
@@ -14,7 +14,7 @@
 
 ## 🏰 Sobre o Nyth
 
-O **Nyth** é um projeto de Open Tibia Server desenvolvido com foco no resgate da era de ouro do jogo (**versão 7.4**), unindo a nostalgia da jogabilidade clássica a melhorias modernas de qualidade de vida, desempenho e estabilidade.
+O **Nyth** é um projeto de Open Tibia Server desenvolvido com foco no resgate da era de ouro do jogo (**versão 7.72**), unindo a nostalgia da jogabilidade clássica a melhorias modernas de qualidade de vida, desempenho e estabilidade.
 
 Nosso objetivo é proporcionar aos jogadores um mundo desafiador, com ritmo tático, PvP imersivo e a clássica dinâmica de exploração e runas, agregando toques especiais e customizações que tornam a experiência fluida, dinâmica e marcante.
 
@@ -22,7 +22,7 @@ Nosso objetivo é proporcionar aos jogadores um mundo desafiador, com ritmo tát
 
 ## ✨ Principais Destaques
 
-* 🏹 **Essência 7.4 Raiz:** Fórmulas de combate clássicas, mecânicas táticas de PvP, vocações originais e economia balanceada.
+* 🏹 **Essência 7.72 Raiz:** Fórmulas de combate clássicas, mecânicas táticas de PvP, vocações originais e economia balanceada.
 * ⚙️ **Customizações Exclusivas:** Recursos e balanceamentos lapidados para valorizar a experiência de jogo sem perder o sentimento oldschool.
 * 🖥️ **Cliente Otimizado:** Suporte a cliente moderno com alta estabilidade, taxa de quadros fluida e suporte aprimorado.
 * 🛡️ **Performance & Robustez:** Arquitetura de servidor revisada para garantir jogabilidade lisa, justa e contínua.
