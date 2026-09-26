@@ -20,10 +20,16 @@ jobs:
   jules:
     if: |
       github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@jules')) ||
-      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@jules')) ||
-      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@jules')) ||
-      (github.event_name == 'issues' && (contains(github.event.issue.body, '@jules') || contains(github.event.issue.title, '@jules')))
+      (
+        !endsWith(github.actor, '[bot]') &&
+        github.event.sender.type != 'Bot' &&
+        (
+          (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@jules')) ||
+          (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@jules')) ||
+          (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@jules')) ||
+          (github.event_name == 'issues' && (contains(github.event.issue.body, '@jules') || contains(github.event.issue.title, '@jules')))
+        )
+      )
     runs-on: ubuntu-latest
     permissions:
       contents: write
