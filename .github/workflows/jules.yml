@@ -18,11 +18,12 @@ on:
 
 jobs:
   jules:
+    # Bots are skipped (no agent loops), except the NythOT Bot GitHub App, which opens the issues
+    # reported on Discord (FEAT-BOT-005).
     if: |
       github.event_name == 'workflow_dispatch' ||
       (
-        !endsWith(github.actor, '[bot]') &&
-        github.event.sender.type != 'Bot' &&
+        (github.actor == 'nythot-bot[bot]' || (!endsWith(github.actor, '[bot]') && github.event.sender.type != 'Bot')) &&
         (
           (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@jules')) ||
           (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@jules')) ||
@@ -39,7 +40,7 @@ jobs:
       actions: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 1
 

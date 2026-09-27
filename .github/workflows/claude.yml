@@ -12,9 +12,10 @@ on:
 
 jobs:
   claude:
+    # Bots are skipped (no agent loops), except the NythOT Bot GitHub App, which opens the issues
+    # reported on Discord (FEAT-BOT-005).
     if: |
-      !endsWith(github.actor, '[bot]') &&
-      github.event.sender.type != 'Bot' &&
+      (github.actor == 'nythot-bot[bot]' || (!endsWith(github.actor, '[bot]') && github.event.sender.type != 'Bot')) &&
       (
         (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
         (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
@@ -30,7 +31,7 @@ jobs:
       actions: read # Required for Claude to read CI results on PRs
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 1
 
@@ -41,3 +42,5 @@ jobs:
           # Token da assinatura Claude (gerado com `claude setup-token`).
           # Para usar chave de API, troque por: anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # The action refuses bot actors by default; only the NythOT Bot App is let through.
+          allowed_bots: "nythot-bot[bot]"
