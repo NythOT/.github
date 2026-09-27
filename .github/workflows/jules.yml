@@ -18,12 +18,20 @@ on:
 
 jobs:
   jules:
-    # Bots are skipped (no agent loops), except the NythOT Bot GitHub App, which opens the issues
-    # reported on Discord (FEAT-BOT-005).
+    # Who may start Jules: the NythOT Bot GitHub App (issues reported on Discord, FEAT-BOT-005), or a
+    # person who is an owner, member or collaborator of the repository. Other bots are skipped (no
+    # agent loops), and so is anyone else: in a public repository any GitHub account could otherwise
+    # spend the organization's Jules quota with an @jules. Manual runs already need write access.
     if: |
       github.event_name == 'workflow_dispatch' ||
       (
-        (github.actor == 'nythot-bot[bot]' || (!endsWith(github.actor, '[bot]') && github.event.sender.type != 'Bot')) &&
+        (
+          github.actor == 'nythot-bot[bot]' ||
+          (
+            !endsWith(github.actor, '[bot]') && github.event.sender.type != 'Bot' &&
+            contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association || github.event.review.author_association || github.event.issue.author_association)
+          )
+        ) &&
         (
           (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@jules')) ||
           (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@jules')) ||
